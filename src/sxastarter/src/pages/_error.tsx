@@ -16,7 +16,11 @@ const ErrorPage: NextPage<ErrorPageProps> = ({ statusCode }) => (
     </Head>
     <div style={{ padding: 10 }}>
       <h1>An error occurred</h1>
-      <p>{statusCode ? `A server-side ${statusCode} error occurred.` : 'A client-side error occurred.'}</p>
+      <p>
+        {statusCode
+          ? `A server-side ${statusCode} error occurred.`
+          : 'A client-side error occurred.'}
+      </p>
       <a href="/">Go to the Home page</a>
     </div>
   </>

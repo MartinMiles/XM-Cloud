@@ -13,7 +13,10 @@ export interface MiddlewarePlugin {
   exec(req: NextRequest, res?: NextResponse, ev?: NextFetchEvent): Promise<NextResponse>;
 }
 
-export default async function middleware(req: NextRequest, ev: NextFetchEvent): Promise<NextResponse> {
+export default async function middleware(
+  req: NextRequest,
+  ev: NextFetchEvent
+): Promise<NextResponse> {
   const response = NextResponse.next();
 
   return (Object.values(plugins) as MiddlewarePlugin[])

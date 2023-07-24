@@ -59,7 +59,12 @@ export const Default = (props: LinkListProps): JSX.Element => {
     const list = datasource.children.results
       .filter((element: ResultsFieldLink) => element?.field?.link)
       .map((element: ResultsFieldLink, key: number) => (
-        <LinkListItem index={key} key={`${key}${element.field.link}`} total={datasource.children.results.length} field={element.field.link} />
+        <LinkListItem
+          index={key}
+          key={`${key}${element.field.link}`}
+          total={datasource.children.results.length}
+          field={element.field.link}
+        />
       ));
 
     return (

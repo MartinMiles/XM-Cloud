@@ -6,17 +6,21 @@ import {
   RenderingType,
   SitecoreContext,
   ComponentPropsContext,
-  handleEditorFastRefresh,
   EditingComponentPlaceholder,
   StaticPath,
 } from '@sitecore-jss/sitecore-jss-nextjs';
+import { handleEditorFastRefresh } from '@sitecore-jss/sitecore-jss-nextjs/utils';
 import { SitecorePageProps } from 'lib/page-props';
 import { sitecorePagePropsFactory } from 'lib/page-props-factory';
-// different componentFactory method will be used based on whether page is being edited
-import { componentFactory, editingComponentFactory } from 'temp/componentFactory';
+import { componentBuilder } from 'temp/componentBuilder';
 import { sitemapFetcher } from 'lib/sitemap-fetcher';
 
-const SitecorePage = ({ notFound, componentProps, layoutData }: SitecorePageProps): JSX.Element => {
+const SitecorePage = ({
+  notFound,
+  componentProps,
+  layoutData,
+  headLinks,
+}: SitecorePageProps): JSX.Element => {
   useEffect(() => {
     // Since Sitecore editors do not support Fast Refresh, need to refresh editor chromes after Fast Refresh finished
     handleEditorFastRefresh();
@@ -28,16 +32,24 @@ const SitecorePage = ({ notFound, componentProps, layoutData }: SitecorePageProp
   }
 
   const isEditing = layoutData.sitecore.context.pageEditing;
-  const isComponentRendering = layoutData.sitecore.context.renderingType === RenderingType.Component;
+  const isComponentRendering =
+    layoutData.sitecore.context.renderingType === RenderingType.Component;
 
   return (
     <ComponentPropsContext value={componentProps}>
-      <SitecoreContext componentFactory={isEditing ? editingComponentFactory : componentFactory} layoutData={layoutData}>
+      <SitecoreContext
+        componentFactory={componentBuilder.getComponentFactory({ isEditing })}
+        layoutData={layoutData}
+      >
         {/*
           Sitecore Pages supports component rendering to avoid refreshing the entire page during component editing.
           If you are using Experience Editor only, this logic can be removed, Layout can be left.
         */}
-        {isComponentRendering ? <EditingComponentPlaceholder rendering={layoutData.sitecore.route} /> : <Layout layoutData={layoutData} />}
+        {isComponentRendering ? (
+          <EditingComponentPlaceholder rendering={layoutData.sitecore.route} />
+        ) : (
+          <Layout layoutData={layoutData} headLinks={headLinks} />
+        )}
       </SitecoreContext>
     </ComponentPropsContext>
   );
@@ -80,13 +92,6 @@ export const getStaticPaths: GetStaticPaths = async (context) => {
 // revalidation (or fallback) is enabled and a new request comes in.
 export const getStaticProps: GetStaticProps = async (context) => {
   const props = await sitecorePagePropsFactory.create(context);
-
-  // Check if we have a redirect (e.g. custom error page)
-  if (props.redirect) {
-    return {
-      redirect: props.redirect,
-    };
-  }
 
   return {
     props,

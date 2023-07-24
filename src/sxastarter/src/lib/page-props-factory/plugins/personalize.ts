@@ -4,10 +4,17 @@ import { getPersonalizedRewriteData, personalizeLayout } from '@sitecore-jss/sit
 import { SitecorePageProps } from 'lib/page-props';
 
 class PersonalizePlugin implements Plugin {
-  order = 2;
+  order = 3;
 
   async exec(props: SitecorePageProps, context: GetServerSidePropsContext | GetStaticPropsContext) {
-    const path = context.params === undefined ? '/' : Array.isArray(context.params.path) ? context.params.path.join('/') : context.params.path ?? '/';
+    if (context.preview) return props;
+
+    const path =
+      context.params === undefined
+        ? '/'
+        : Array.isArray(context.params.path)
+        ? context.params.path.join('/')
+        : context.params.path ?? '/';
 
     // Get variant for personalization (from path)
     const personalizeData = getPersonalizedRewriteData(path);

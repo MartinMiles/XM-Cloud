@@ -1,4 +1,4 @@
-# XM Cloud Starter Kit (With SXA and Next JS)
+# XM Cloud Starter Kit (Next JS)
 
 ## QUICK START
 
@@ -14,16 +14,13 @@
     .\up.ps1
     ```
 
-3. Deploy to XM Cloud
+3. Follow the instructions to [deploy to XM Cloud](#deploy-to-xmcloud)
 
-4. Create Edge token and query from edge
-
-5. Deploy to Vercel
+4. Create Edge token and [query from edge](#query-edge)
 
 *** 
 
 ## About this Solution
-
 This solution is designed to help developers learn and get started quickly with XMCLoud + SXA.
 
 It is done from a default Foundation Head staterkit, plus I added useful features to is above the default:
@@ -35,4 +32,3 @@ It is done from a default Foundation Head staterkit, plus I added useful feature
 - a basic example of customization (Expander/Collapser for Content Editor)
 - build and deploy scripts
 - deployment to Vercel script
-

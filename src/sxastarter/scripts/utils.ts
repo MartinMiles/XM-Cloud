@@ -5,7 +5,10 @@ import chokidar from 'chokidar';
  * Run watch mode, watching on @var rootPath
  */
 export function watchItems(rootPath: string, cb: () => void): void {
-  chokidar.watch(rootPath, { ignoreInitial: true, awaitWriteFinish: true }).on('add', cb).on('unlink', cb);
+  chokidar
+    .watch(rootPath, { ignoreInitial: true, awaitWriteFinish: true })
+    .on('add', cb)
+    .on('unlink', cb);
 }
 
 /**

@@ -6,7 +6,9 @@ import * as plugins from 'temp/page-props-factory-plugins';
  * Determines whether context is GetServerSidePropsContext (SSR) or GetStaticPropsContext (SSG)
  * @param {GetServerSidePropsContext | GetStaticPropsContext} context
  */
-export const isServerSidePropsContext = function (context: GetServerSidePropsContext | GetStaticPropsContext): context is GetServerSidePropsContext {
+export const isServerSidePropsContext = function (
+  context: GetServerSidePropsContext | GetStaticPropsContext
+): context is GetServerSidePropsContext {
   return (<GetServerSidePropsContext>context).req !== undefined;
 };
 
@@ -18,7 +20,10 @@ export interface Plugin {
   /**
    * A function which will be called during page props generation
    */
-  exec(props: SitecorePageProps, context: GetServerSidePropsContext | GetStaticPropsContext): Promise<SitecorePageProps>;
+  exec(
+    props: SitecorePageProps,
+    context: GetServerSidePropsContext | GetStaticPropsContext
+  ): Promise<SitecorePageProps>;
 }
 
 export class SitecorePagePropsFactory {
@@ -27,7 +32,9 @@ export class SitecorePagePropsFactory {
    * @param {GetServerSidePropsContext | GetStaticPropsContext} context
    * @see SitecorePageProps
    */
-  public async create(context: GetServerSidePropsContext | GetStaticPropsContext): Promise<SitecorePageProps> {
+  public async create(
+    context: GetServerSidePropsContext | GetStaticPropsContext
+  ): Promise<SitecorePageProps> {
     const extendedProps = await (Object.values(plugins) as Plugin[])
       .sort((p1, p2) => p1.order - p2.order)
       .reduce(async (result, plugin) => {
